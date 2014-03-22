@@ -1,0 +1,135 @@
+#forkongithub a {
+    background: rgb(46, 181, 204);
+    color: #fff;
+    text-decoration: none;
+    font-family:arial, sans-serif;
+    text-align:center;
+    font-weight:bold;
+    padding:5px 40px;
+    font-size:1rem;
+    line-height:2rem;
+    position:relative;
+    transition:0.5s;
+}
+
+#forkongithub a:hover {
+    background: rgb(205, 81, 53);
+    color:#fff;
+}
+
+#forkongithub a::before, #forkongithub a::after {
+    content:"";
+    width:100%;
+    display:block;
+    position:absolute;
+    top:1px;
+    left:0;
+    height:1px;
+    background:#fff;
+}
+
+#forkongithub a::after {
+    bottom:1px;
+    top:auto;
+}
+
+@media screen and (min-width:960px) {
+    #forkongithub {
+        position:absolute;
+        display:block;
+        top:0;
+        right:0;
+        width:200px;
+        overflow:hidden;
+        height:200px;
+    }
+    #forkongithub a {
+        width:200px;
+        position:absolute;
+        top:60px;
+        right:-60px;
+        transform:rotate(45deg);
+        -webkit-transform:rotate(45deg);
+        box-shadow:4px 4px 10px rgba(0,0,0,0.8);
+    }
+}
+
+body {
+    font-family: 'Play', sans-serif;
+    margin: 0;
+}
+
+.full-width {
+    max-width: 960px;
+    margin: auto;
+}
+
+header {
+    background-color: rgb(46, 181, 204);
+    color: white;
+}
+
+.header-left {
+    height: 200px;
+}
+
+.header-left h1 {
+    font-size: 3.5em;
+    position: relative;
+    top: 60px;
+    left: 50px;
+}
+
+.portrait {
+    float: right;
+}
+
+.gittip, .rss {
+    float: right;
+    margin-top: 150px;
+    margin-right: 10px;
+}
+
+.gittip {
+    background-color: white;
+    padding: 5px 7px 5px 6px;
+    border-radius: 7px;
+}
+
+.rss {
+    color: white;
+    font-size: 47px;
+    position: relative;
+    top: -2px;
+    transition: 0.5s;
+}
+
+.rss:hover {
+    color: rgb(205, 81, 53);
+}
+
+.main {
+    padding: 0 10px;
+}
+
+.main a {
+    color: rgb(46, 181, 204);
+    text-decoration: initial;
+}
+.main a:hover { color: rgb(205, 81, 53); }
+.main a:visited { color: rgb(46, 121, 204); }
+.main a:visited:hover { color: rgb(205, 81, 53); }
+
+.main h2 {
+    color: rgb(46, 181, 204);
+}
+
+.main h2:before {
+    content: "/ ";
+    color: rgb(205, 81, 53);
+    font-family: serif;
+}
+
+#disqus_thread {
+    margin-top: 1.5em;
+}
