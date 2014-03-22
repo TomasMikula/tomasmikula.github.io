@@ -133,3 +133,27 @@ header {
 #disqus_thread {
     margin-top: 1.5em;
 }
+
+code {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    padding: 0 3px;
+    border-radius: 3px;
+}
+
+.highlight pre {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    font-size: 13px;
+    line-height: 19px;
+    overflow: auto;
+    padding: 6px 10px;
+    border-radius: 3px;
+}
+
+.highlight pre code {
+    background-color: inherit;
+    border: none;
+    padding: 0;
+    border-radius: 0;
+}
