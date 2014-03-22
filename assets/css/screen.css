@@ -130,6 +130,16 @@ header {
     font-family: serif;
 }
 
+.main h2.page-title {
+    margin-bottom: 7px;
+}
+
+.main p.page-metadata {
+    margin-top: 0px;
+    font-size: small;
+    color: #999999;
+}
+
 #disqus_thread {
     margin-top: 1.5em;
 }

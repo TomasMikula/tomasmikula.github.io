@@ -4,6 +4,6 @@ title: TomasMikula
 ---
 
 {% for post in site.posts %}
-  <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+  {% include page_title.html post=post %}
   {{ post.excerpt }}
 {% endfor %}
