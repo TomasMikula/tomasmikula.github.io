@@ -33,7 +33,7 @@ interface MonadicObservableValue<T> extends ObservableValue<T> {
 
 Note that all of these methods have _default_ implementation provided by the interface, so they would make a backwards compatible addition to `ObservableValue`.
 
-**ifPresent** checks whether this ObservableValue holds a _non-null_ value. 
+**isPresent** checks whether this ObservableValue holds a _non-null_ value. 
 
 **isEmpty** is the negation of `isPresent`. 
 
