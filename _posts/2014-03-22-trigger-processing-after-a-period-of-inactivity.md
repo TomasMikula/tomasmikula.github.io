@@ -4,6 +4,8 @@ title: Trigger processing after a period of inactivity
 tags: JavaFX ReactFX
 ---
 
+**EDIT:** Edited on 25 April 2014 to use the latest ReactFX API.
+
 This post shows how to use [ReactFX](http://www.reactfx.org) to defer processing of user input until a specified period of user's inactivity. This is useful, for example, to trigger spell checking or syntax highlighting after the user hasn't typed anything for, say, 500ms. Another use-case, which we use in this post, is real-time HTML rendering of user input.
 
 Imagine an application with a TextArea for raw HTML input and a WebView where this HTML is rendered in real time.
@@ -33,7 +35,7 @@ This is how to achieve this with ReactFX:
 
 {% highlight java linenos %}
 EventStreams.valuesOf(textArea.textProperty())
-        .reduceCloseSuccessions((a, b) -> b, Duration.ofMillis(500))
+        .successionEnds(Duration.ofMillis(500))
         .subscribe(html -> engine.loadContent(html));
 {% endhighlight %}
 
@@ -41,7 +43,7 @@ EventStreams.valuesOf(textArea.textProperty())
 
  1. The first line creates an _event stream_ that emits the new value of input every time the input text changes.
 
- 2. The second line creates an event stream that _reduces_ values from the first stream that come in close temporal succession into one. The reduction function `(a, b) -> b` means that we always retain the latter of the two values. After arrival of a value from the first stream, this stream waits for at most 500 milliseconds for another value. If a value arrives within this interval, the two values are reduced (here meaning that the previous one is forgotten) and the stream waits for another 500ms. If no value arrives within this interval, the currently stored value is emitted from this stream.
+ 2. The second line creates an event stream that retains only the last event of each succession of _temporally close_ events. Two successive events are said to be _temporally close_ if, in this case, they arrive within 500 milliseconds from each other.
 
  3. The third line says that whenever a value (raw HTML) is emitted from the second stream, we pass it to the web engine for rendering.
 
@@ -73,7 +75,7 @@ public class DeferredHtmlRendering extends Application {
         WebEngine engine = webView.getEngine();
 
         EventStreams.valuesOf(textArea.textProperty())
-                .reduceCloseSuccessions((a, b) -> b, Duration.ofMillis(500))
+                .successionEnds(Duration.ofMillis(500))
                 .subscribe(html -> engine.loadContent(html));
 
         SplitPane root = new SplitPane();
