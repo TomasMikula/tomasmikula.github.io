@@ -4,9 +4,9 @@ title: Trigger processing after a period of inactivity
 tags: JavaFX ReactFX
 ---
 
-**EDIT:** Edited on 25 April 2014 to use the latest ReactFX API.
-
 This post shows how to use [ReactFX](http://www.reactfx.org) to defer processing of user input until a specified period of user's inactivity. This is useful, for example, to trigger spell checking or syntax highlighting after the user hasn't typed anything for, say, 500ms. Another use-case, which we use in this post, is real-time HTML rendering of user input.
+
+**EDIT:** Edited on 25 April 2014 to use the latest ReactFX API.
 
 Imagine an application with a TextArea for raw HTML input and a WebView where this HTML is rendered in real time.
 
