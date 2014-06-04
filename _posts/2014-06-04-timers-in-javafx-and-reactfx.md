@@ -84,9 +84,9 @@ Timer timer = FxTimer.runLater(
 timer.stop();
 ```
 
-There is one _important semantic difference_ between the above code snippets. In the first one, `doSomething()` may still be executed _after_ `timeline.stop()`, even though both `timeline.stop()` and `doSomething()` are executed on the JavaFX application thread. It happens when `stop()` is called after the timeline has reached the key frame, but before the associated action had a chance to be executed on the JavaFX application thread.
+There is one _important semantic difference_ between the above code snippets. In the first one, `doSomething()` may still be executed _after_ `timeline.stop()`, even though both `timeline.stop()` and `doSomething()` are executed on the JavaFX application thread. It happens when `stop()` is called after the timeline has reached the key frame, but before the associated action had a chance to be executed on the JavaFX application thread. **EDIT:** Note that this behavior makes sense for animations: if there is an action _a_ associated with time _t1_ and `stop()` is called at time _t2 > t1_, then, if not already done so, _a_ should still be executed in order to advance the animation to a state corresponding to _t2_.
 
-On the other hand, `FxTimer` takes an extra measure to ensure that the action is never executed after `stop()`.
+On the other hand, for timers it makes sense to cancel the timer upon `stop()` even if the timer is already overdue. Therefore, `FxTimer` takes an extra measure to ensure that the action is never executed after `stop()`.
 
 <details>
   <summary>Here is the code that shows that behavior.</summary>
