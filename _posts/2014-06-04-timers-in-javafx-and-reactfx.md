@@ -49,7 +49,7 @@ FxTimer.runPeriodically(
         () -> doSomething());
 ```
 
-Or, if you really like event streams:
+Or, because we really like event streams:
 
 ```java
 EventStreams.ticks(Duration.ofMillis(2500))
