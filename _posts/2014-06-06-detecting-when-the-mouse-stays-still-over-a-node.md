@@ -40,7 +40,7 @@ EitherEventStream<Point2D, Void> stationaryEvents =
 
 #### Highlights
 
-* There are _no mutable variables_ to track state, like `lastMousePosition` or `isStationary`. All the variables above are effectively final and all state is managed by the event streams.
+* There are _no mutable variables_ to track state, like `lastMousePosition` or `isStationary`. Any use of timers to measure the 1 second delay is completely hidden as well. All the variables above are effectively final and all state is managed by the event streams.
 * There is _no CPU overhead_ when no one is actually subscribed to `stationaryEvents`. This is due to the lazy nature of event streams. Only when someone subscribes to `stationaryEvents` does this propagate all the way down and an event handler is registered for mouse events on the node.
 
 #### Usage
