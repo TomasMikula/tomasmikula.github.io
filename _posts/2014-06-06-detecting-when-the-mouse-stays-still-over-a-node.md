@@ -22,7 +22,7 @@ EventStream<Point2D> stationaryPositions = mouseEvents
         .filter(e -> e.getEventType() == MouseEvent.MOUSE_MOVED)
         .map(e -> new Point2D(e.getX(), e.getY()));
 
-EventStream<Void> stoppers = mouseEvents.supply(null);
+EventStream<Void> stoppers = mouseEvents.supply((Void) null);
 
 EitherEventStream<Point2D, Void> stationaryEvents =
         stationaryPositions.or(stoppers)
