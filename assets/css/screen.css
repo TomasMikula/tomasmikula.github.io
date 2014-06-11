@@ -121,13 +121,13 @@ header {
     padding: 0 10px;
 }
 
-.main a {
+.main a[href] {
     color: rgb(46, 181, 204);
     text-decoration: initial;
 }
-.main a:hover { color: rgb(205, 81, 53); }
-.main a:visited { color: rgb(46, 121, 204); }
-.main a:visited:hover { color: rgb(205, 81, 53); }
+.main a[href]:hover { color: rgb(205, 81, 53); }
+.main a[href]:visited { color: rgb(46, 121, 204); }
+.main a[href]:visited:hover { color: rgb(205, 81, 53); }
 
 .main h2 {
     color: rgb(46, 181, 204);
@@ -175,4 +175,9 @@ code {
     border: none;
     padding: 0;
     border-radius: 0;
+}
+
+div.post img {
+    display: block;
+    margin: auto;
 }
