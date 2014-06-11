@@ -73,6 +73,7 @@ public final class BehaviorSkin<C extends Control, V extends Visual>
 extends SkinBase<C> {
     private final V visual;
     private final Behavior behavior;
+    private final Node node;
 
     public BehaviorSkin(
             C control,
@@ -81,11 +82,13 @@ extends SkinBase<C> {
         super(control);
         this.visual = visualFactory.apply(control);
         this.behavior = behaviorFactory.apply(control, visual);
-        getChildren().add(visual.getNode());
+        this.node = visual.getNode();
+        getChildren().add(node);
     }
 
     @Override
     public void dispose() {
+        getChildren().remove(node);
         behavior.dispose();
         visual.dispose();
     }
