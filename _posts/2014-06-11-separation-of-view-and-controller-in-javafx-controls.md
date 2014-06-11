@@ -77,7 +77,7 @@ extends SkinBase<C> {
     public BehaviorSkin(
             C control,
             Function<? super C, ? extends V> visualFactory,
-            BiFunction<? super C, ? super V, Behavior> behaviorFactory) {
+            BiFunction<? super C, ? super V, ? extends Behavior> behaviorFactory) {
         super(control);
         this.visual = visualFactory.apply(control);
         this.behavior = behaviorFactory.apply(control, visual);
