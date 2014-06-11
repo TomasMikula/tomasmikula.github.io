@@ -125,7 +125,7 @@ The Behavior implementation may still extend from `BehaviorBase` where it did be
 
 ### Conclusion
 
-The outlined extension to the API for skin implementations is rather conservative---it does not present any radical changes. Its main goal is to encourage separation of view and controller aspects. It does not address other challenges connected with skin implementations, such as a mechanism to bind key events to actions (which would be the responsibility of the BehaviorBase class). On the other hand, it does not close any doors to resolving such challenges.
+The outlined extension to the API for skin implementations is rather conservative---it does not present any radical shifts. Its main goal is to encourage separation of view and controller aspects. It does not address other challenges connected with skin implementations, such as a mechanism to bind key events to actions (which would be the responsibility of the BehaviorBase class). On the other hand, it does not close any doors to resolving such challenges.
 
 
 ----------
