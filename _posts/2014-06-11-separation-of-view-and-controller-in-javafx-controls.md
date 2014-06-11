@@ -126,6 +126,8 @@ Also note that `BehaviorSkin` does not implement `Skin` directly, but instead ex
 
 The Behavior implementation may still extend from `BehaviorBase` where it did before, though this class is not part of the public API either.
 
+**UPDATE:** I have fleshed out the API also for skins that are not represented by a single node, but need direct access control's child list. Here is the [Javadoc for the updated API](http://www.fxmisc.org/richtext/javadoc/org/fxmisc/richtext/util/skin/package-summary.html).
+
 ### Conclusion
 
 The outlined extension to the API for skin implementations is rather conservative---it does not present any radical shifts. Its main goal is to encourage separation of view and controller aspects. It does not address other challenges connected with skin implementations, such as a mechanism to bind key events to actions (which would be the responsibility of the BehaviorBase class). On the other hand, it does not close any doors to resolving such challenges.
