@@ -104,8 +104,8 @@ The general template for the Control's [createDefaultSkin()](http://docs.oracle.
 protected Skin<?> createDefaultSkin() {
     return new BehaviorSkin<>(
             this,
-            control -> new MyVisual(control),
-            (control, visual) -> new MyBehavior(control, visual));
+            control -> new FooVisual(control),
+            (control, visual) -> new FooBehavior(control, visual));
 }
 ```
 
@@ -113,7 +113,7 @@ or more concisely using constructor references
 
 ```java
 protected Skin<?> createDefaultSkin() {
-    return new BehaviorSkin<>(this, MyVisual::new, MyBehavior::new);
+    return new BehaviorSkin<>(this, FooVisual::new, FooBehavior::new);
 }
 ```
 
