@@ -24,7 +24,7 @@ EventStream<Point2D> stationaryPositions = mouseEvents
 
 EventStream<Void> stoppers = mouseEvents.supply((Void) null);
 
-EitherEventStream<Point2D, Void> stationaryEvents =
+EventStream<Either<Point2D, Void>> stationaryEvents =
         stationaryPositions.or(stoppers)
                 .distinct();
 {% endhighlight %}
@@ -46,8 +46,10 @@ EitherEventStream<Point2D, Void> stationaryEvents =
 #### Usage
 
 ```java
-stationaryEvents.left().subscribe(pos -> showTooltipAt(pos));
-stationaryEvents.right().subscribe(stop -> hideTooltip());
+stationaryEvents.subscribe(either -> either.exec(
+        pos -> showTooltipAt(pos),
+        stop -> hideTooltip()
+));
 ```
 
 
@@ -84,11 +86,11 @@ public class MouseStationaryEvent extends InputEvent {
 Now, to start dispatching `MouseStationaryEvent`s for a node, you simply do this:
 
 ```java
-EitherEventStream<Point2D, Void> stationaryEvents = // defined above
+EventStream<Either<Point2D, Void>> stationaryEvents = // defined above
 
-stationaryEvents.unify(
+stationaryEvents.<Event>map(either -> either.unify(
         pos -> MouseStationaryEvent.beginAt(node.localToScreen(pos)),
-        stop -> MouseStationaryEvent.end())
+        stop -> MouseStationaryEvent.end()))
     .subscribe(evt -> Event.fireEvent(node, evt));
 ```
 
@@ -121,8 +123,10 @@ node.addEventHandler(MOUSE_STATIONARY_END, e -> {
 MouseStationaryHelper helper =
         new MouseStationaryHelper(node, Duration.ofSeconds(1));
 
-helper.events().left().subscribe(pos -> showTooltipAt(pos));
-helper.events().right().subscribe(stop -> hideTooltip());
+helper.events().subscribe(either -> either.exec(
+        pos -> showTooltipAt(pos),
+        stop -> hideTooltip()
+));
 
 // If you would rather use standard JavaFX way,
 // start dispatching MouseStationaryEvents on the node.
