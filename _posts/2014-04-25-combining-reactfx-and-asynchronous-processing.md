@@ -81,6 +81,9 @@ textValues.successionEnds(Duration.ofMillis(500))
 
  6. Line 6 just applies every highlighting emitted on line 5 to the text in the text area.
 
+**EDIT:** Here is a marble diagram from [Eugen Kiss](https://github.com/eugenkiss) illustrating the possible situations.
+![Marble diagram]({{ site.url }}/assets/img/2014-04-25-combining-reactfx-and-asynchronous-processing/marble-diagram.png)
+
 ### Full example
 
 A full working example is [this demo](https://github.com/TomasMikula/RichTextFX/blob/master/richtextfx-demos/src/main/java/org/fxmisc/richtext/demo/JavaKeywordsAsync.java) that highlights Java keywords.
