@@ -3,3 +3,5 @@ domain: https://tomasmikula.github.io
 markdown: redcarpet
 redcarpet:
   extensions: [smart]
+gems:
+  - jemoji

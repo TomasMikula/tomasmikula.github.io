@@ -177,7 +177,7 @@ code {
     border-radius: 0;
 }
 
-div.post img {
+div.post img:not(.emoji) {
     display: block;
     margin: auto;
 }
