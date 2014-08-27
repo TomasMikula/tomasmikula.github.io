@@ -1,5 +1,5 @@
 ---
 layout: blog_by_tag
 tag: ReactFX
-permalink: reactfx/
+permalink: blog/tag/reactfx/
 ---
