@@ -1,9 +1,9 @@
 ---
 layout: default
-title: TomasMikula
+title: TomasMikula/blog
 ---
 
 {% for post in site.posts %}
-  {% include page_title.html post=post %}
+  {% include post_title.html post=post %}
   {{ post.excerpt }}
 {% endfor %}

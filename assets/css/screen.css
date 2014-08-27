@@ -129,6 +129,19 @@ header {
 .main a[href]:visited { color: rgb(46, 121, 204); }
 .main a[href]:visited:hover { color: rgb(205, 81, 53); }
 
+.main h1.filter-title {
+    color: #bbb;
+    text-align: center;
+}
+
+.main h1.filter-title:before {
+    content: "/ ";
+}
+
+.main h1.filter-title:after {
+    content: " /";
+}
+
 .main h2 {
     color: rgb(46, 181, 204);
 }
@@ -139,11 +152,11 @@ header {
     font-family: serif;
 }
 
-.main h2.page-title {
+.main h2.post-title {
     margin-bottom: 7px;
 }
 
-.main p.page-metadata {
+.main p.post-metadata {
     margin-top: 0px;
     font-size: small;
     color: #999999;
