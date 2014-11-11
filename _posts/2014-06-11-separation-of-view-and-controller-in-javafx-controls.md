@@ -126,7 +126,7 @@ Also note that `BehaviorSkin` does not implement `Skin` directly, but instead ex
 
 The Behavior implementation may still extend from `BehaviorBase` where it did before, though this class is not part of the public API either.
 
-**UPDATE:** I have fleshed out the API also for skins that are not represented by a single node, but need direct access control's child list. Here is the [Javadoc for the updated API](http://www.fxmisc.org/richtext/javadoc/org/fxmisc/richtext/util/skin/package-summary.html).
+**UPDATE:** I have fleshed out the API also for skins that are not represented by a single node, but need direct access control's child list. Here is the [Javadoc for the updated API](http://www.fxmisc.org/wellbehaved/javadoc/org/fxmisc/wellbehaved/skin/package-summary.html).
 
 ### Conclusion
 
