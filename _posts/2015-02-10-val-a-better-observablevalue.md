@@ -4,7 +4,7 @@ title: "Val&lt;T&gt;: a better ObservableValue"
 tags: JavaFX ReactFX
 ---
 
-[ObservableValue](http://docs.oracle.com/javase/8/javafx/api/javafx/beans/value/ObservableValue.html) is the JavaFX way of representing a time-varying value, whose changes can be observed by a listener. As it is, it really is a bare bones interface. I myself have previously enriched it in two different ways: EasyBind's `MonadicObservableValue` that adds some useful operations, and InhiBeans to postpone listener notifications. [Val](http://www.reactfx.org/javadoc/2.0-M2/org/reactfx/value/Val.html), introduced in ReactFX 2.0 Milestone 2, integrates both these ideas and adds some more.
+[ObservableValue](http://docs.oracle.com/javase/8/javafx/api/javafx/beans/value/ObservableValue.html) is the JavaFX way of representing a time-varying value, whose changes can be observed by a listener. As it is, it really is a bare bones interface. I myself have previously enriched it in two different ways: EasyBind's `MonadicObservableValue` that adds some useful operations, and InhiBeans to postpone listener notifications. [Val](http://www.reactfx.org/javadoc/2.0-M2/org/reactfx/value/Val.html), introduced in ReactFX [2.0 Milestone 2](https://github.com/TomasMikula/ReactFX/releases/tag/v2.0-M2), integrates both these ideas and adds some more.
 
 
 ### Rich set of additional operations
