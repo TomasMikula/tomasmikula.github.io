@@ -44,14 +44,16 @@ Val<Double> height = // ...
 Val<Double> area = Val.combine(width, height, (w, h) -> w * h);
 ```
 
-At this point, there is no listener registered with either `width` or `height`. When the first listener is attached to `area`, only at that point does `area` start observing `width` and `height`. Similarly, when the last listener is unregistered from `area`, `area` stops observing `width` and `height`. I call this `lazy binding`, for the lack of a better name. This should be familiar to ReactFX users, because this is how `EventStream`s have always done binding to their inputs. This concept is also known as _cold observables_ in Rx.
+At this point, there is no listener registered with either `width` or `height`. When the first listener is attached to `area`, only at that point does `area` start observing `width` and `height`. Similarly, when the last listener is unregistered from `area`, `area` stops observing `width` and `height`. I call this _lazy binding_, for the lack of a better name. This should be familiar to ReactFX users, because this is how `EventStream`s have always done binding to their inputs. This concept is also known as _cold observables_ in Rx.
 
-In the [previous post]({% post_url 2015-02-10-the-trouble-with-weak-listeners %}) I promised to give a better alternative to using `WeakListener`s for bindings. Lazy binding is that alternative. No matter how big the network of bindings is, you only need to remove those listeners that you have registered. All intermediate links will be "disposed" automatically. No weak listeners needed, both problems mentioned in the previous post avoided.
+In the [previous post]({% post_url 2015-02-10-the-trouble-with-weak-listeners %}) I promised to give a better alternative to using `WeakListener`s for bindings. _Lazy binding_ is that alternative. No matter how big the network of bindings is, you only need to remove those listeners that you have registered. All intermediate links will be "disposed" automatically. No weak listeners needed, both problems mentioned in the previous post avoided.
 
 
 ### Correct behavior on recursive changes
 
-It is possible that a change triggers another change of the same observable value. Changes reported by JavaFX's observable values in that case are simply not correct. Let's show an example. The program below creates an `IntegerProperty` with initial value 0 and attaches two change listeners to it. The first change listener looks at the new value `val` and if it is greater than 0, (recursively) sets the property to `val - 1`. The second listener just prints the changes it observes to the standard output. Let's set the property value to 2 and see what happens.
+It is possible that a change triggers another change of the same observable value. Changes reported by JavaFX's observable values in that case are simply _not correct_.
+
+Let's show an example. The program below creates an `IntegerProperty` with initial value 0 and attaches two change listeners to it. The first change listener looks at the new value `val` and if it is greater than 0, (recursively) sets the property to `val - 1`. The second listener just prints the changes it observes to the standard output. Let's change the property value and see what happens.
 
 ```java
 IntegerProperty p = new SimpleIntegerProperty(0);
@@ -72,12 +74,14 @@ The output is
 0 -> 0
 ```
 
-which means that the second listener saw the value of the property changing from 1 to 0, then from 2 to 0, and finally from 0 to 0. _This is just wrong._ The value was actually changing like this: `0 -> 2 -> 1 -> 0`. Any of the following sequences of observed changes would be consistent with what happened:
+which means that the second listener saw the value of the property changing from 1 to 0, then from 2 to 0, and finally from 0 to 0. **This is just wrong.** The value was actually changing like this: `0 -> 2 -> 1 -> 0`. Any of the following sequences of observed changes would be consistent with what happened:
 
-* `[0 -> 2, 2 -> 1, 1 -> 0]`,
-* `[0 -> 2, 2     ->     0]`,
-* `[0     ->     1, 1 -> 0]`,
-* `[                      ]` (no change observed),
+<ul>
+<li><pre>[0 -&gt; 2, 2 -&gt; 1, 1 -&gt; 0],</pre></li>
+<li><pre>[0 -&gt; 2, 2     -&gt;     0],</pre></li>
+<li><pre>[0     -&gt;     1, 1 -&gt; 0],</pre></li>
+<li><pre>[                      ] <span style="color: gray"><i>(no change observed)</i></span>,</pre></li>
+</ul>
 
 but the listener observed something else.
 
