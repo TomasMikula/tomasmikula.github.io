@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Val<T>: a better ObservableValue"
+title: "Val&lt;T&gt;: a better ObservableValue"
 tags: JavaFX ReactFX
 ---
 
