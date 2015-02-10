@@ -4,7 +4,7 @@ title: "The Trouble with Weak Listeners"
 tags: JavaFX
 ---
 
-JavaFX bindings use [WeakListener](http://docs.oracle.com/javase/8/javafx/api/javafx/beans/WeakListener.html)s to observe their dependencies. This reduces the need to [dispose()](http://download.java.net/jdk8/jfxdocs/javafx/beans/binding/Binding.html#dispose--) bindings, but comes with some surprising behavior. In this post I show two kinds of problems introduced by weak listeners. In the next post, I will show how we can do better without weak listeners.
+JavaFX bindings use [WeakListener](http://docs.oracle.com/javase/8/javafx/api/javafx/beans/WeakListener.html)s to observe their dependencies. This reduces the need to [dispose()](http://download.java.net/jdk8/jfxdocs/javafx/beans/binding/Binding.html#dispose--) bindings, but comes with some surprising behavior. In this post I show two kinds of problems introduced by weak listeners. In the [next post]({% post_url 2015-02-10-val-a-better-observablevalue %}), I will show how we can do better without weak listeners.
 
 
 ### Why Weak Listeners
