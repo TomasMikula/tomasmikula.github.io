@@ -77,4 +77,4 @@ No! If there is no observer of the animated value, there is no animation going o
 Val<T> animated = val.animate(duration, interpolator);
 ```
 
-does not start the animation yet. Only when a listener is registered with the animated value is there a JavaFX animation started in the background. As soon as all the listeners are removed, the background animation is stopped. In other words, animated values follow the ReactFX's general philosophy of _lazy binding_.
+does not start the animation yet. Only when a listener is registered with the `animated` value does a JavaFX animation start in the background. As soon as all the listeners are removed, the background animation is stopped. In other words, animated values follow the ReactFX's general philosophy of _lazy binding_.
