@@ -68,3 +68,13 @@ Val<Point2D> animCenter = center.animate(
 The only difference is on the second line, where now the duration of the transition is proportional to the distance between the two points. Now the speed of the circle will be the same for short and long distances, but it will take longer to travel longer distances.
 
 Here is the full [source code of this demo](https://github.com/TomasMikula/ReactFX/blob/master/reactfx-demos/src/main/java/org/reactfx/demo/AnimatedValDemo.java), where clicking on the circle will relocate it to a random position.
+
+### Does it animate even if no one is listening?
+
+No! If there is no observer of the animated value, there is no animation going on in the background and no system resources are used. Just saying
+
+```java
+Val<T> animated = val.animate(duration, interpolator);
+```
+
+does not start the animation yet. Only when a listener is registered with the animated value is there a JavaFX animation started in the background. As soon as all the listeners are removed, the background animation is stopped. In other words, animated values follow the ReactFX's general philosophy of _lazy binding_.
