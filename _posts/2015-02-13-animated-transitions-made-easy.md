@@ -6,9 +6,28 @@ tags: JavaFX ReactFX
 
 In the [previous post]({% post_url 2015-02-10-val-a-better-observablevalue %}) I presented ReactFX's [Val](http://www.reactfx.org/javadoc/2.0-M3/org/reactfx/value/Val.html) as an improved [ObservableValue](http://docs.oracle.com/javase/8/javafx/api/javafx/beans/value/ObservableValue.html). In ReactFX 2.0 Milestone 3 it got even better: changes to values can be animated seamlessly.
 
+
 This work was initially inspired by Mike Hearn's [animatedBind](https://gist.github.com/mikehearn/f639176566d735b676e7) function, but the API is rather different.
 
-Let's show it on an example. We will be changing the center of a circle and we want the circle to move smoothly to the new location, instead of jumping there right away. So we have a circle and a property that we will be changing in order to move the circle:
+### TL;DR Version
+
+In short, in order to make a value animate, you just need to specify the _duration_ of the transition and the _interpolation_ for the animated value.
+
+```java
+Val<Double> val = ...;
+Val<Double> animated = val.animate(Duration.ofMillis(500), EASE_BOTH_DOUBLE);
+```
+
+Use adapter static methods if you don't yet have a `Val`:
+
+```java
+ObservableValue<Double> val = ...;
+Val<Double> animated = Val.animate(val, Duration.ofMillis(500), EASE_BOTH_DOUBLE);
+```
+
+### Example: Animating Circle Center
+
+We will be changing the center of a circle and we want the circle to move _smoothly_ to the new location, instead of jumping there right away. So we have a circle and a property that we will be changing in order to move the circle:
 
 ```java
 Circle circle = new Circle(30.0, Color.BLUE);
