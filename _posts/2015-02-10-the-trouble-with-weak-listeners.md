@@ -66,5 +66,17 @@ This problem is more subtle and less known. That's right, weak listeners do not 
 The output of this program is
 
 ```
-Used Memory after GC: 52MB
+Used Memory after GC: 52.73 MB
+```
+
+**UPDATE:**
+
+Now that I have [presented Vals/Vars]({% post_url 2015-02-10-val-a-better-observablevalue %}), here is the same program rewritten using `Val`s/`Var`s. It still does nothing, but does it much more efficiently.
+
+{% gist TomasMikula/62c6e33863f2092f27c9 NonLeakyReactFX.java %}
+
+And the output is
+
+```
+Used Memory after GC: 0.98 MB
 ```
