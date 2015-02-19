@@ -59,7 +59,9 @@ Still, this keeps biting people over and over.
 
 ### Problem 2: Memory Leaks
 
-This problem is more subtle and less known. That's right, weak listeners do not entirely prevent memory leaks. A weak listener is a wrapper that holds a weak reference to the actual (non-weak) listener. It is true that when the actual listener is no longer strongly reachable, it will be garbage collected. But what about removing the wrapper (holding the now cleared weak reference) from the list of listeners of an observable? The wrapper clears itself when it is invoked and finds out its actual listener is gone. The problem arises when the observable is never invalidated again, and thus the weak listener does not get a chance to clear itself. Here is an example that amplifies the problem by registering many weak listeners to an observable that is never invalidated:
+This problem is more subtle and less known. That's right, weak listeners do not entirely prevent memory leaks. It [has been reported](https://javafx-jira.kenai.com/browse/RT-32797) before and closed as _"Won't Fix"_.
+
+A weak listener is a wrapper that holds a weak reference to the actual (non-weak) listener. It is true that when the actual listener is no longer strongly reachable, it will be garbage collected. But what about removing the wrapper (holding the now cleared weak reference) from the list of listeners of an observable? The wrapper clears itself when it is invoked and finds out its actual listener is gone. The problem arises when the observable is never invalidated again, and thus the weak listener does not get a chance to clear itself. Here is an example that amplifies the problem by registering many weak listeners to an observable that is never invalidated:
 
 {% gist TomasMikula/62c6e33863f2092f27c9 Leaky.java %}
 
