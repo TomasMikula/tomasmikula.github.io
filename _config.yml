@@ -1,7 +1,0 @@
-permalink: /blog/:year/:month/:day/:title.html
-domain: https://tomasmikula.github.io
-markdown: redcarpet
-redcarpet:
-  extensions: [smart]
-gems:
-  - jemoji

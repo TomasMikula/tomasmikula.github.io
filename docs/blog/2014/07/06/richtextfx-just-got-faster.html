@@ -1,0 +1,80 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>RichTextFX just got faster</title>
+  <link rel="alternate" type="application/rss+xml" title="TomasMikula/blog - Feed" href="../../../feed.xml">
+  <!--<link rel="icon" type="image/png" href="/favicon.png" />-->
+  <link href='http://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css'>
+  <link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <link href="../../../assets/css/screen.css" rel="stylesheet" type="text/css">
+  <link href="../../../assets/css/syntax.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <header class="full-width">
+    <span id="forkongithub"><a href="https://github.com/TomasMikula">Fork me on GitHub</a></span>
+    <img class="portrait" src="../../../assets/img/portrait-200x200.jpg">
+    <div class="header-left">
+      <a class="gittip" href="https://www.gittip.com/TomasMikula/" title="If you like my work, you can support me through Gittip."><img src="../../../assets/img/gittip.png"></a>
+      <a class="rss" href="../../../feed.xml" title="RSS feed"><i class="fa fa-rss-square"></i></a>
+      <h1><a href="../../../">TomasMikula/blog</a></h1>
+    </div>
+  </header>
+
+  <section class="full-width">
+    <div class="main">
+      
+<h2 class="post-title"><a href="../../../2014/07/06/richtextfx-just-got-faster.html">RichTextFX just got faster</a></h2>
+<p class="post-metadata">
+Posted on: 06 July 2014
+
+  , tags: 
+  <a href="../../../tag/javafx"><b>JavaFX</b></a>, 
+
+  
+  <a href="../../../tag/richtextfx"><b>RichTextFX</b></a>, 
+
+  
+  <a href="../../../tag/flowless"><b>Flowless</b></a>
+
+</p>
+
+
+<div class="post">
+<p>When I started working with JavaFX almost a year ago, there was no native JavaFX code-editing control. Just like any decent programming language hosts its own compiler, I believe any decent UI toolkit should host its own IDE. And you cannot have an IDE without a code editor. It is great that JavaFX allows you to embed HTML and Javascript, but on the other hand, I found it somewhat embarassing that users of the best UI toolkit on the planet had to resort to embedding HTML to get a text editor with syntax highlighting. So I started CodeAreaFX, which evolved to <a href="http://www.fxmisc.org/richtext/">RichTextFX</a>.</p>
+
+<p>It <a href="http://fxexperience.com/2013/02/interview-with-tom-schindl-2/">had been noted before</a> that for performance it was crucial to use a <em>virtual</em> layout, such as <a href="http://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/ListView.html">ListView</a>. A virtual layout is one that only calculates the visible part of the scene. So I used ListView to lay out lines of text. The performance still was not great. Now <em>I</em> felt embarassed that those embedded Javascript editors probably performed better than my native solution. It turned out ListView was doing unnecessarily many cell updates. Combined with the complexity of TextFlow, it was too slow to destroy, recreate and apply style to the whole viewport of, say, 30 lines of code on every typed character.</p>
+
+<p>I set out to optimize and <a href="http://www.fxmisc.org/flowless/">Flowless</a> was born. Flowless is a virtual flow implementation with emphasis on eliminating unnecessary cell updates. Using Flowless, I get smooth editing experience even on an old (2010) laptop. You, too, can use Flowless in your applications in place of ListView if too many <a href="http://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/Cell.html#updateItem-T-boolean-"><code class="language-plaintext highlighter-rouge">updateItem</code></a> calls hinder the performance of your app. Note, however, that Flowless is a low-level layout container and you will have to make an extra effort to implement features like selection or inline editing. It would be great if someone from the community implemented a full-featured ListView on top of Flowless <img class="emoji" title=":wink:" alt=":wink:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f609.png" height="20" width="20">.</p>
+
+<p>RichTextFX itself is a flexible low-level component able to support rich-text editing, syntax highlighting and more, but does not come with batteries included (by design). The upside is that you can use any lexer/parser you like. The downside is that you have to wire the lexer/parser to RichTextFX yourself (which is not difficult at all, but still…). Hopefully next time someone uses RichTextFX as the code editor in their project, they will consider wiring in a lexer with support for many languages and publish their work online <img class="emoji" title=":wink:" alt=":wink:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f609.png" height="20" width="20">.</p>
+
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'tomasmikula';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+</noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </div>
+  </section>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49276025-1', 'tomasmikula.github.io');
+  ga('send', 'pageview');
+</script>
+
+</body>

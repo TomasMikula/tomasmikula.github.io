@@ -1,0 +1,104 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ReactFX's general stream combinator: State Machine</title>
+  <link rel="alternate" type="application/rss+xml" title="TomasMikula/blog - Feed" href="../../../feed.xml">
+  <!--<link rel="icon" type="image/png" href="/favicon.png" />-->
+  <link href='http://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css'>
+  <link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <link href="../../../assets/css/screen.css" rel="stylesheet" type="text/css">
+  <link href="../../../assets/css/syntax.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <header class="full-width">
+    <span id="forkongithub"><a href="https://github.com/TomasMikula">Fork me on GitHub</a></span>
+    <img class="portrait" src="../../../assets/img/portrait-200x200.jpg"/>
+    <div class="header-left">
+      <a class="gittip" href="https://www.gittip.com/TomasMikula/" title="If you like my work, you can support me through Gittip."><img src="../../../assets/img/gittip.png"/></a>
+      <a class="rss" href="../../../feed.xml" title="RSS feed"><i class="fa fa-rss-square"></i></a>
+      <h1><a href="../../../">TomasMikula/blog</a></h1>
+    </div>
+  </header>
+
+  <section class="full-width">
+    <div class="main">
+      
+<h2 class="post-title"><a href="../../../2014/05/01/reactfxs-general-stream-combinator-state-machine.html">ReactFX's general stream combinator: State Machine</a></h2>
+<p class="post-metadata">
+Posted on: 01 May 2014
+
+  , tags: 
+  <a href="../../../tag/javafx"><b>JavaFX</b></a>, 
+
+  
+  <a href="../../../tag/reactfx"><b>ReactFX</b></a>
+
+</p>
+
+
+<div class="post">
+<p>In <a href="http://www.reactfx.org">ReactFX</a>, we work with event streams. It provides various operations on event streams such as <code class="language-plaintext highlighter-rouge">filter</code>, <code class="language-plaintext highlighter-rouge">map</code>, <code class="language-plaintext highlighter-rouge">merge</code>, <code class="language-plaintext highlighter-rouge">zip</code>, <code class="language-plaintext highlighter-rouge">combine</code>, <code class="language-plaintext highlighter-rouge">reduceSuccessions</code>. Of course these cannot cover all the use cases. In such a case, you can either extend <a href="http://www.reactfx.org/javadoc/org/reactfx/LazilyBoundStream.html">LazilyBoundStream</a> to implement your custom stream combinator, or you can use the <em>state machine</em> combinator.</p>
+
+<p>A state machine has a <em>state</em> and multiple <em>input streams</em>. An event emitted by an input stream causes the state machine to update its state and/or to emit an event. We demonstrate ReactFX’s internal DSL (fluent API) for defining state machines on an example.</p>
+
+<h3 id="example">Example</h3>
+
+<p>We implement a stream combinator that takes a source stream and two control streams. An event from one control stream <em>mutes</em> the source stream, an event from the other control stream <em>unmutes</em> the source stream. The resulting stream emits the same events as the source stream, but only when not muted. We are going to represent the internal state as a boolean indicating whether the source stream is muted.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="nc">EventStream</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">source</span> <span class="o">=</span> <span class="o">...;</span>
+<span class="nc">EventStream</span><span class="o">&lt;?&gt;</span> <span class="n">muteImpulse</span> <span class="o">=</span> <span class="o">...;</span>
+<span class="nc">EventStream</span><span class="o">&lt;?&gt;</span> <span class="n">unmuteImpulse</span> <span class="o">=</span> <span class="o">...;</span>
+
+<span class="nc">EventStream</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">combined</span> <span class="o">=</span> <span class="nc">StateMachine</span><span class="o">.</span><span class="na">init</span><span class="o">(</span><span class="kc">false</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="n">muteImpulse</span><span class="o">).</span><span class="na">transition</span><span class="o">((</span><span class="n">wasMuted</span><span class="o">,</span> <span class="n">i</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="kc">true</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="n">unmuteImpulse</span><span class="o">).</span><span class="na">transition</span><span class="o">((</span><span class="n">wasMuted</span><span class="o">,</span> <span class="n">i</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="kc">false</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="n">source</span><span class="o">).</span><span class="na">emit</span><span class="o">((</span><span class="n">muted</span><span class="o">,</span> <span class="n">t</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">muted</span> <span class="o">?</span> <span class="nc">Optional</span><span class="o">.</span><span class="na">empty</span><span class="o">()</span> <span class="o">:</span> <span class="nc">Optional</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">t</span><span class="o">))</span>
+    <span class="o">.</span><span class="na">toEventStream</span><span class="o">();</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<ul>
+  <li>On line 5 we set the initial state to <code class="language-plaintext highlighter-rouge">false</code> (not muted).</li>
+  <li>Line 6 says that when an event arrives from the <code class="language-plaintext highlighter-rouge">muteImpulse</code> stream, we set the internal state to <code class="language-plaintext highlighter-rouge">true</code> (muted), no matter what the previous state or the value of the impulse is.</li>
+  <li>Line 7 says that when an event arrives from the <code class="language-plaintext highlighter-rouge">unmuteImpulse</code> stream, we set the internal state to <code class="language-plaintext highlighter-rouge">false</code> (not muted), no matter what the previous state or the value of the impulse is.</li>
+  <li>Line 8 states that when an event arrives from the <code class="language-plaintext highlighter-rouge">source</code> stream, it is either emitted or not, based on the internal state (muted or not).</li>
+  <li>Line 9 completes the creation of the state machine and the associated stream.</li>
+</ul>
+
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'tomasmikula';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </div>
+  </section>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49276025-1', 'tomasmikula.github.io');
+  ga('send', 'pageview');
+</script>
+
+</body>

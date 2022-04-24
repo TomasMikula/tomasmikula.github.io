@@ -1,0 +1,164 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Combining ReactFX and asynchronous processing</title>
+  <link rel="alternate" type="application/rss+xml" title="TomasMikula/blog - Feed" href="../../../feed.xml">
+  <!--<link rel="icon" type="image/png" href="/favicon.png" />-->
+  <link href='http://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css'>
+  <link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <link href="../../../assets/css/screen.css" rel="stylesheet" type="text/css">
+  <link href="../../../assets/css/syntax.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <header class="full-width">
+    <span id="forkongithub"><a href="https://github.com/TomasMikula">Fork me on GitHub</a></span>
+    <img class="portrait" src="../../../assets/img/portrait-200x200.jpg"/>
+    <div class="header-left">
+      <a class="gittip" href="https://www.gittip.com/TomasMikula/" title="If you like my work, you can support me through Gittip."><img src="../../../assets/img/gittip.png"/></a>
+      <a class="rss" href="../../../feed.xml" title="RSS feed"><i class="fa fa-rss-square"></i></a>
+      <h1><a href="../../../">TomasMikula/blog</a></h1>
+    </div>
+  </header>
+
+  <section class="full-width">
+    <div class="main">
+      
+<h2 class="post-title"><a href="../../../2014/04/25/combining-reactfx-and-asynchronous-processing.html">Combining ReactFX and asynchronous processing</a></h2>
+<p class="post-metadata">
+Posted on: 25 April 2014
+
+  , tags: 
+  <a href="../../../tag/javafx"><b>JavaFX</b></a>, 
+
+  
+  <a href="../../../tag/reactfx"><b>ReactFX</b></a>
+
+</p>
+
+
+<div class="post">
+<p>We have seen previously how to use <a href="http://www.reactfx.org">ReactFX</a> to <a href="../../../2014/03/22/trigger-processing-after-a-period-of-inactivity.html">trigger processing after a period of user’s inactivity</a>. In this post, we are going to make the processing asynchronous and apply its result back to the scene when complete. The example we are going to use is <em>syntax highlighting</em>.</p>
+
+<h3 id="task">Task</h3>
+
+<p>When the user pauses typing for 500 milliseconds, trigger background computation of syntax highlighting. When done, apply the computed highlighting to the text, but only if it’s still valid, i.e. the text hasn’t changed in the meantime.</p>
+
+<h3 id="prerequisites">Prerequisites</h3>
+
+<p>In order to make syntax highlighting work, we need a text area that supports highlighting ranges of text, such as <a href="http://www.fxmisc.org/richtext/">RichTextFX</a>.</p>
+
+<p>We are going to use JavaFX’s <a href="http://docs.oracle.com/javase/8/javafx/api/javafx/concurrent/Task.html">Task</a> to represent asynchronous computations. (In addition to Task, ReactFX also supports <a href="http://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletionStage.html">CompletionStage</a> as a representation of asynchronous computation.)</p>
+
+<h3 id="assumptions">Assumptions</h3>
+
+<p>We don’t include the details of how to represent, compute and apply highlighting. We are just going to assume the following definitions:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/** Represents highlighting. */</span>
+<span class="kd">class</span> <span class="nc">Highlighting</span> <span class="o">{</span>
+    <span class="c1">// ...</span>
+<span class="o">}</span>
+
+<span class="cm">/** Computes highlighting for the given text. */</span>
+<span class="nc">Highlighting</span> <span class="nf">computeHighlighting</span><span class="o">(</span><span class="nc">String</span> <span class="n">text</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// ...</span>
+<span class="o">}</span>
+
+<span class="cm">/** Applies the given highlighting to the text area. */</span>
+<span class="kt">void</span> <span class="nf">applyHighlighting</span><span class="o">(</span><span class="nc">Highlighting</span> <span class="n">highlighting</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// ...</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="helpers">Helpers</h3>
+
+<p>We define a helper method that computes highlighting in the background.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">ExecutorService</span> <span class="n">executor</span> <span class="o">=</span> <span class="nc">Executors</span><span class="o">.</span><span class="na">newSingleThreadExecutor</span><span class="o">();</span>
+
+<span class="nc">Task</span><span class="o">&lt;</span><span class="nc">Highlighting</span><span class="o">&gt;</span> <span class="nf">computeHighlightingAsync</span><span class="o">(</span><span class="nc">String</span> <span class="n">text</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Task</span><span class="o">&lt;</span><span class="nc">Highlighting</span><span class="o">&gt;</span> <span class="n">task</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Task</span><span class="o">&lt;</span><span class="nc">Highlighting</span><span class="o">&gt;()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">protected</span> <span class="nc">Highlighting</span> <span class="nf">call</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nf">computeHighlighting</span><span class="o">(</span><span class="n">text</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">};</span>
+    <span class="n">executor</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="n">task</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">task</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="solution">Solution</h3>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="nc">EventStream</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">textValues</span> <span class="o">=</span> <span class="nc">EventStreams</span><span class="o">.</span><span class="na">valuesOf</span><span class="o">(</span><span class="n">textArea</span><span class="o">.</span><span class="na">textProperty</span><span class="o">());</span>
+<span class="nc">EventStream</span><span class="o">&lt;?&gt;</span> <span class="n">cancelImpulse</span> <span class="o">=</span> <span class="n">textValues</span><span class="o">;</span>
+<span class="n">textValues</span><span class="o">.</span><span class="na">successionEnds</span><span class="o">(</span><span class="nc">Duration</span><span class="o">.</span><span class="na">ofMillis</span><span class="o">(</span><span class="mi">500</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">mapToTask</span><span class="o">(</span><span class="k">this</span><span class="o">::</span><span class="n">computeHighlightingAsync</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">awaitLatest</span><span class="o">(</span><span class="n">cancelImpulse</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="k">this</span><span class="o">::</span><span class="n">applyHighlighting</span><span class="o">);</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="explanation">Explanation</h3>
+
+<ol>
+  <li>
+    <p>Line 1 creates an <em>event stream</em> that emits the new value of text area’s text every time the text changes.</p>
+  </li>
+  <li>
+    <p>Line 2 just gives another name to the same stream. We are going to use every new value of text to cancel the asynchronous computation currently in progress.</p>
+  </li>
+  <li>
+    <p>On line 3, we only keep the text values that haven’t changed in the last 500 milliseconds.</p>
+  </li>
+  <li>
+    <p>Line 4 starts asynchronous computation of highlighting for text values that survived the filter from line 3.</p>
+  </li>
+  <li>
+    <p>Line 5 creates a stream that emits the results of asynchronous computations started by line 4. It only emits the ones that haven’t been outdated by the time they are completed. An asynchronous computation is considered outdated if either another asynchronous computation starts before it is completed, or an impulse to cancel the computation arrives. As a consequence, a highlighting that is emitted from the stream on line 5 is up to date and can be applied to the text in text area.</p>
+  </li>
+  <li>
+    <p>Line 6 just applies every highlighting emitted on line 5 to the text in the text area.</p>
+  </li>
+</ol>
+
+<p><strong>EDIT:</strong> Here is a marble diagram from <a href="https://github.com/eugenkiss">Eugen Kiss</a> illustrating the possible situations.
+<img src="http://www.continuously.dev/assets/img/2014-04-25-combining-reactfx-and-asynchronous-processing/marble-diagram.png" alt="Marble diagram" /></p>
+
+<h3 id="full-example">Full example</h3>
+
+<p>A full working example is <a href="https://github.com/TomasMikula/RichTextFX/blob/master/richtextfx-demos/src/main/java/org/fxmisc/richtext/demo/JavaKeywordsAsync.java">this demo</a> that highlights Java keywords.</p>
+
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'tomasmikula';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </div>
+  </section>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49276025-1', 'tomasmikula.github.io');
+  ga('send', 'pageview');
+</script>
+
+</body>
