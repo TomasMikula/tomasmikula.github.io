@@ -93,16 +93,10 @@ header {
     float: right;
 }
 
-.gittip, .rss {
+.rss {
     float: right;
     margin-top: 150px;
     margin-right: 10px;
-}
-
-.gittip {
-    background-color: white;
-    padding: 5px 7px 5px 6px;
-    border-radius: 7px;
 }
 
 .rss {
