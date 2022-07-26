@@ -37,7 +37,9 @@ jobs:
         cd libretto
         sbt docs/docsSite
     - name: Publish Libretto docs
-      run: |
+      run: | 
+        git config user.name github-actions
+        git config user.email github-actions@github.com
         git rm -rf --ignore-unmatch "docs/libretto/docs/${{ github.event.inputs.tag }}"
         mkdir -p "docs/libretto/docs"
         cp -R libretto/docs-project/target/docs-site "docs/libretto/docs/${{ github.event.inputs.tag }}"
