@@ -36,3 +36,7 @@ jobs:
         ls -a
         cat .gitmodules
         ls libretto
+    - name: checkout libretto tag
+      run: |
+        cd libretto
+        git checkout "${{ github.event.inputs.tag }}"
