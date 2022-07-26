@@ -1,0 +1,65 @@
+name: Publish Libretto Docs
+
+on:
+  # manually triggered using the UI or API
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Libretto tag to build documentation for'
+        required: true
+      latest:
+        type: boolean
+        description: Publish also as latest
+
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install sbt
+      run: |
+        sudo apt-get update
+        sudo apt-get install apt-transport-https curl gnupg -yqq
+        echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | sudo tee /etc/apt/sources.list.d/sbt.list
+        echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | sudo tee /etc/apt/sources.list.d/sbt_old.list
+        curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | sudo -H gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/scalasbt-release.gpg --import
+        sudo chmod 644 /etc/apt/trusted.gpg.d/scalasbt-release.gpg
+        sudo apt-get update
+        sudo apt-get install sbt
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        ref: github-actions-playground
+        submodules: true
+    - name: Checkout Libretto tag
+      run: |
+        cd libretto
+        git fetch --tags
+        git checkout "${{ github.event.inputs.tag }}"
+    - name: Build Libretto docs
+      run: |
+        cd libretto
+        sbt docs/docsSite
+    - name: Publish Libretto docs
+      run: | 
+        BRANCH="update/libretto-docs/${{ github.event.inputs.tag }}"
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git checkout -b "$BRANCH"
+        mkdir -p "docs/libretto/docs"
+        git rm -rf --ignore-unmatch "docs/libretto/docs/${{ github.event.inputs.tag }}"
+        cp -R libretto/docs-project/target/docs-site "docs/libretto/docs/${{ github.event.inputs.tag }}"
+        git add "docs/libretto/docs/${{ github.event.inputs.tag }}"
+        echo "latest='${{ github.event.inputs.latest }}'"
+        if [ ${{ github.event.inputs.latest }} = "true" ]; then
+          git rm -rf --ignore-unmatch "docs/libretto/docs/latest"
+          cp -R libretto/docs-project/target/docs-site "docs/libretto/docs/latest"
+          git add "docs/libretto/docs/latest"
+        fi
+        git commit -m "Publish Libretto docs ${{ github.event.inputs.tag }}"
+        git push --set-upstream origin "$BRANCH"
+    - name: Open Pull Request
+      uses: vsoch/pull-request-action@1.0.19
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PULL_REQUEST_BRANCH: "master"
+        PULL_REQUEST_FROM_BRANCH: "update/libretto-docs/${{ github.event.inputs.tag }}"
