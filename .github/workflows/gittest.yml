@@ -14,9 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Install sbt
-        run: |
-          sudo apt-get update
-          sudo apt-get install sbt
+      run: |
+        sudo apt-get update
+        sudo apt-get install sbt
     - name: Echo tag
       run: echo "The tag is ${{ github.event.inputs.tag }}"
     - name: Checkout
