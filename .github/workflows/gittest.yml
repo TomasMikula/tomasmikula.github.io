@@ -33,5 +33,5 @@ jobs:
     - name: look around
       run: |
         pwd
-        ls
-        ls libretto
+        ls -a
+        cat .gitmodules
