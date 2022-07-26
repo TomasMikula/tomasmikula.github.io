@@ -12,7 +12,6 @@ on:
 jobs:
   explore:
     runs-on: ubuntu-latest
-
     steps:
     - name: Install sbt
         run: |
