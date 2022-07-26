@@ -18,5 +18,7 @@ jobs:
       run: echo "The tag is ${{ github.event.inputs.tag }}"
     - name: Git version
       run: git version
-    - name: Git status
-      run: git status
+    - name: pwd
+      run: pwd
+    - name: ls
+      run: ls
