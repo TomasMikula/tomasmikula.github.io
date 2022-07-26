@@ -27,9 +27,20 @@ jobs:
       with:
         ref: github-actions-playground
         submodules: true
-    - name: Build Libretto docs
+    - name: Checkout Libretto tag
       run: |
         cd libretto
         git fetch --tags
         git checkout "${{ github.event.inputs.tag }}"
+    - name: Build Libretto docs
+      run: |
         sbt docs/docsSite
+    - name: Publish Libretto docs
+      run: |
+        cd ..
+        git rm -rf --ignore-unmatch "docs/libretto/docs/${{ github.event.inputs.tag }}"
+        mkdir -p "docs/libretto/docs"
+        cp -R libretto/docs-project/target/docs-site "docs/libretto/docs/${{ github.event.inputs.tag }}"
+        git add "docs/libretto/docs/${{ github.event.inputs.tag }}"
+        git commit -m "Publish Libretto docs ${{ github.event.inputs.tag }}"
+        git push
