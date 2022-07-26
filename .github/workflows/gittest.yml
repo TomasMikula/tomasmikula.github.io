@@ -10,7 +10,7 @@ on:
         required: true
 
 jobs:
-  greet:
+  explore:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,3 +18,5 @@ jobs:
       run: echo "The tag is ${{ github.event.inputs.tag }}"
     - name: Git version
       run: git version
+    - name: Git status
+      run: git status
