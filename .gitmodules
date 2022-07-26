@@ -1,0 +1,3 @@
+[submodule "libretto"]
+	path = libretto
+	url = https://github.com/TomasMikula/libretto.git

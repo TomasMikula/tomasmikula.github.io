@@ -30,9 +30,8 @@ jobs:
       with:
         ref: master
         submodules: true
-    - name: Git version
-      run: git version
-    - name: pwd
-      run: pwd
-    - name: ls
-      run: ls
+    - name: look around
+      run: |
+        pwd
+        ls
+        ls libretto
