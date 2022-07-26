@@ -1,0 +1,20 @@
+name: Git Test
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Git tag to build documentation for'
+        required: true
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Echo tag
+      run: echo "The tag is ${{ github.event.inputs.tag }}"
+    - name: Git version
+      run: git version
