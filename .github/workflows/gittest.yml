@@ -1,4 +1,4 @@
-name: Git Test
+name: Publish Libretto Docs
 
 on:
   # manually triggered using the UI or API
@@ -9,7 +9,7 @@ on:
         required: true
 
 jobs:
-  explore:
+  go:
     runs-on: ubuntu-latest
     steps:
     - name: Install sbt
@@ -34,10 +34,10 @@ jobs:
         git checkout "${{ github.event.inputs.tag }}"
     - name: Build Libretto docs
       run: |
+        cd libretto
         sbt docs/docsSite
     - name: Publish Libretto docs
       run: |
-        cd ..
         git rm -rf --ignore-unmatch "docs/libretto/docs/${{ github.event.inputs.tag }}"
         mkdir -p "docs/libretto/docs"
         cp -R libretto/docs-project/target/docs-site "docs/libretto/docs/${{ github.event.inputs.tag }}"
