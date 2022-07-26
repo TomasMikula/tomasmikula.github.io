@@ -39,4 +39,6 @@ jobs:
     - name: checkout libretto tag
       run: |
         cd libretto
-        git checkout "${{ github.event.inputs.tag }}"
+        git tag
+        git status
+        # git checkout "${{ github.event.inputs.tag }}"
