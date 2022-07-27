@@ -49,7 +49,7 @@ jobs:
         git commit -m "Publish Libretto docs ${{ github.event.inputs.tag }}"
         git push --set-upstream origin "$BRANCH"
     - name: Open Pull Request
-      uses: vsoch/pull-request-action@master
+      uses: vsoch/pull-request-action@1.0.19
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PULL_REQUEST_BRANCH: "master"
