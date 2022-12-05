@@ -28,7 +28,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        ref: github-actions-playground
+        ref: master
         submodules: true
     - name: Checkout Libretto tag
       run: |
