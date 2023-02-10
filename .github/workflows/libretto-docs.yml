@@ -45,15 +45,15 @@ jobs:
         git config user.name github-actions
         git config user.email github-actions@github.com
         git checkout -b "$BRANCH"
-        mkdir -p "docs/p/libretto/docs"
-        git rm -rf --ignore-unmatch "docs/p/libretto/docs/${{ github.event.inputs.tag }}"
-        cp -R libretto/docs-project/target/docs-site "docs/p/libretto/docs/${{ github.event.inputs.tag }}"
-        git add "docs/p/libretto/docs/${{ github.event.inputs.tag }}"
+        mkdir -p "docs/libretto/docs"
+        git rm -rf --ignore-unmatch "docs/libretto/docs/${{ github.event.inputs.tag }}"
+        cp -R libretto/docs-project/target/docs-site "docs/libretto/docs/${{ github.event.inputs.tag }}"
+        git add "docs/libretto/docs/${{ github.event.inputs.tag }}"
         echo "latest='${{ github.event.inputs.latest }}'"
         if [ ${{ github.event.inputs.latest }} = "true" ]; then
-          git rm -rf --ignore-unmatch "docs/p/libretto/docs/latest"
-          cp -R libretto/docs-project/target/docs-site "docs/p/libretto/docs/latest"
-          git add "docs/p/libretto/docs/latest"
+          git rm -rf --ignore-unmatch "docs/libretto/docs/latest"
+          cp -R libretto/docs-project/target/docs-site "docs/libretto/docs/latest"
+          git add "docs/libretto/docs/latest"
         fi
         git commit -m "Publish Libretto docs ${{ github.event.inputs.tag }}"
         git push --set-upstream origin "$BRANCH"
