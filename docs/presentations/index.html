@@ -1,0 +1,91 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<title>continuously.dev</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<link rel="icon" type="image/svg" href="assets/favicon.svg" />
+<style>
+body {
+    background-color: #252525;
+    color: white;
+    font-family: Verdana, sans-serif;
+    text-align: center;
+}
+a         { color: white; }
+a:visited { color: white; }
+#main {
+    max-width: 800px;
+    margin: auto;
+    text-align: justify;
+}
+.talk-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.event {
+    margin-top: 10px;
+}
+.event-name {
+    font-style: italic;
+}
+.date {
+    font-style: italic;
+}
+</style>
+</head>
+<body>
+
+<h1>Conference Talks (Tomas Mikula)</h1>
+
+<div id="main">
+
+<h2 class="talk-title">Repurposing Scala's Pattern Matching for Deeply Embedded DSLs</h2>
+<p class="event">
+<span class="event-name">ScalaIO,</span> <span class="date">Nov 2024</span>
+<a href="https://continuously.dev/presentations/Repurposing_Scalas_Pattern_Matching.pdf">[slides]</a>
+</p>
+
+<h2 class="talk-title">Monads Are Not About Sequencing</h2>
+<p class="event">
+<span class="event-name">Functional Scala,</span> <span class="date">Nov 2023</span>,
+<a href="https://www.youtube.com/watch?v=ncnP6y91NNo">[video]</a>
+<a href="https://continuously.dev/presentations/Monads-not-about-sequencing_20231201.pdf">[slides]</a>
+</p>
+
+<h2 class="talk-title">When Your DSL Needs to Support User-Defined Domain Functions</h2>
+<p class="event">
+<span class="event-name">ScalaDays,</span> <span class="date">Sep 2023</span>,
+<a href="https://www.youtube.com/watch?v=caGbfOSvrGQ">[video]</a>
+<a href="https://continuously.dev/presentations/When_your_DSL_needs_to_support_user-defined_domain_functions_20230914.pdf">[slides]</a>
+</p>
+Presents the DSL embedding technique behind Libretto: <em>delambdification</em> followed by <em>"compiling to categories"</em> (i.e. to point-free representation).
+
+<h2 class="talk-title">Concurrent All The Way Down (Functional Concurrency with Libretto)</h2>
+<p class="event">
+<span class="event-name">LambdaDays,</span> <span class="date">Jun 2023</span>,
+<a href="https://www.youtube.com/watch?v=jDCoR0o4qVY">[video]</a>
+<a href="https://continuously.dev/presentations/Concurrent-All-The-Way-Down_20230606.pdf">[slides]</a>
+</p>
+Concurrency without threads or side-effects.
+
+<h2 class="talk-title">Custom Stream Operators Made Safe And Simple with Libretto</h2>
+<p class="event">
+<span class="event-name">Scalar,</span> <span class="date">Mar 2023</span>,
+<a href="https://www.youtube.com/watch?v=iPn4iwSu5Sw">[video]</a>
+<a href="https://continuously.dev/presentations/Custom-Stream-Operators_20230324.pdf">[slides]</a>
+</p>
+Shows the expressiveness of Libretto in implementing stream operators. Presents examples that are hard to express in other stream libraries.<br/>
+
+<h2 class="talk-title">Typed Interaction with Session Types (using Scala and Libretto)</h2>
+<p class="event">
+<span class="event-name">Functional Scala,</span> <span class="date">Dec 2022,</span>
+<a href="https://www.youtube.com/watch?v=IU_nb6yozas">[video]</a>
+<a href="https://continuously.dev/presentations/Typed_Interaction_with_Session_Types_20221201.pdf">[slides]</a>
+</p>
+Shows how Libretto expresses session types, which are not natively supported by the Scala type system.<br/>
+
+</div>
+
+</body>
+</html>
